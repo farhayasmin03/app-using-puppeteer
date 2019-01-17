@@ -15,6 +15,24 @@ const URL = 'https://coding.napolux.com';
     await page.goto(URL, {
         waitUntil: 'networkidle0'
     });
+    await page.addScriptTag({url: 'https://code.jquery.com/jquery-3.2.1.min.js'})
+
+    const result = await page.evaluate(() => {
+        try {
+            var data = [];
+            $('h3.loop__post-title').each(function() {
+                const url = $(this).find('a').attr('href');
+                const title = $(this).find('a').attr('title')
+                data.push({
+                    'title' : title,
+                    'url'   : url
+                });
+            });
+            return data; // Return our data array
+        } catch(err) {
+            reject(err.toString());
+        }
+    });
     await browser.close();
 
 
